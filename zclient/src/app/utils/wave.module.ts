@@ -1,6 +1,13 @@
-import { getElement } from 'src/app/utils/dom.functions';
 import { Undefined } from 'src/app/utils/optional';
 import { Point } from './point.model';
+
+/**
+ * Again, i do not advice anyone to rely any data that needs
+ * fine-grained tracking on the front-end. In a real application
+ * I would sugest some library like REDIS or similar to build those
+ * Waves. But, this is not any critical data and this is just an pratical
+ * example.
+ */
 
 export class WaveMapper {
   private wave: Wave;

@@ -1,7 +1,7 @@
 import { WavePoint } from './../../utils/wave.module';
 import { Component, Output, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { interval, Observable, Subject, Subscription } from 'rxjs';
+import { interval, Observable, Subject, Subscription, timer } from 'rxjs';
 import { finalize, take } from 'rxjs/operators';
 import { getElement } from 'src/app/utils/dom.functions';
 import { Pct, Px } from 'src/app/utils/formatters';
@@ -21,7 +21,9 @@ import { Point } from './../../utils/point.model';
  * I DO NOT ADVICE ANYONE TO CREATE A FRONT-END THIS WAY.
  * NOT TOO MUCH BY ITS LOGIC BUT FOR ITS READABILITY.
  *
- * THIS IS JUST AN EXAMPLE.
+ * THIS IS NOT HOW I CREATE A FRONT-END. IF YOU WANNA SEE
+ * MY FRONT-END APPLICATIONS, CHECK MY FRONT-END PROJECTS.
+ * THIS IS JUST AN PRATICAL EXAMPLE.
  *
  *
  *
@@ -56,14 +58,16 @@ export class GameComponent implements OnInit {
     this.engine.start((state: WavePoint) => {
       this.mapper.store(new Point(state.x, state.y, state.z), state.timestamp);
       if (state.z !== 0) {
-        // console.warn('State:', state);
+        console.warn('State:', state);
 
-        this.system.storeWave(this.mapper.getWave(this.system.currentUser.id)).subscribe((res) => {
-          console.log('Response', res);
-          if (state.z === -1) {
-            this.end = true;
-          }
-        });
+        this.system
+          .storeWave(this.mapper.getWave(this.system.currentUser.id))
+          .subscribe((res) => {
+            console.log('Response', res);
+            if (state.z === -1) {
+              this.end = true;
+            }
+          });
         this.mapper.clear();
       }
     });
@@ -89,6 +93,8 @@ export class GameComponent implements OnInit {
   }
 
   private setUpEngine(): void {
+    // this.engineConfig.timeBetween = 5000;
+    // this.engineConfig.timeAlive = 3500;
     this.engine = new GameEngine('game-box', this.engineConfig);
     this.engine.cheater.setUpBoard('game-box');
   }
@@ -119,6 +125,7 @@ class GameEngine {
   private $tates: Subject<WavePoint>;
   private currentMousePosition: Point;
   private timestamp: number;
+  private renderizedElement: any;
 
   public cheater: Cheater;
   public scores: number;
@@ -158,6 +165,15 @@ class GameEngine {
     if (e.key === 'q') {
       this.cheater.enabled = !this.cheater.enabled;
     }
+
+    /**
+     * This observer replaces the mouse event...
+     */
+    if (this.cheater.enabled) {
+      this.cheater.cheat(this.renderizedElement, (point: Point) => {
+        this.$tates.next(new WavePoint(0, point, this.timestamp));
+      });
+    }
   }
 
   private setUp() {
@@ -168,25 +184,23 @@ class GameEngine {
   private renderGameElement(): void {
     console.log('Render');
 
-    let e = new GameElement(Undefined(this.config.elementSize, 40));
-    e.setPosition(this.getRandomPlace())
+    this.renderizedElement = new GameElement(
+      Undefined(this.config.elementSize, 40)
+    );
+    this.renderizedElement
+      .setPosition(this.getRandomPlace())
       .render(this.id, this.config.timeAlive)
       .subscribe((res: string) => {
         if (res) this.$Score();
         else this.$Timeout();
         this.accuracy = Pct(
-          Percent(Number(this.scores) + Number(this.timeouts), Number(this.scores), 2)
+          Percent(
+            Number(this.scores) + Number(this.timeouts),
+            Number(this.scores),
+            2
+          )
         );
       });
-
-    /**
-     * This observer replaces the mouse event...
-     */
-    if (this.cheater.enabled) {
-      this.cheater.cheat(e, (point: Point) => {
-        this.$tates.next(new WavePoint(0, point, this.timestamp));
-      });
-    }
   }
 
   private setMouseEvent(e: MouseEvent) {
@@ -213,7 +227,7 @@ class GameEngine {
   }
 
   private createGameElementInterval(): Observable<number> {
-    return interval(this.config.timeBetween).pipe(
+    return timer(100, this.config.timeBetween).pipe(
       take(Math.ceil(this.config.timeLimit / this.config.timeBetween)),
       finalize(() => this.finishGame())
     );
@@ -364,7 +378,7 @@ class GameElement {
         this.$ubject.next(true);
         this.element.outerHTML = '';
         this.die();
-      }, 50);
+      }, 20);
     });
 
     this.timeout = setTimeout(() => {
@@ -495,7 +509,8 @@ class Cheater {
         clearInterval(k);
         if (this.board) this.board.style.cursor = 'unset';
         this.fakeCursor.style.display = 'none';
-        this.$ubject.next(new Point(xStep * i, yStep * i, 2));
+        this.$ubject.next(new Point(xStep * i, yStep * i, 0));
+        this.enabled = false;
       } else {
         this.$ubject.next(new Point(xStep * i, yStep * i, 0));
       }

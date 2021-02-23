@@ -11,7 +11,6 @@ import { SystemService } from './../../services/system.service';
   styleUrls: ['game-report.component.css'],
 })
 export class GameReportComponent implements OnInit, OnDestroy {
-
   data: ChartModelSet[];
   subscription: Subscription;
   config: ChartConfig;
@@ -28,11 +27,15 @@ export class GameReportComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.system.getUserAnalytics().subscribe((analytics) => {
-      analytics.forEach((data) => {
-        console.log('game-analysis', data);
-        this.data.push(this.mapper.map(data));
-      });
-      console.log("Data Mapped", this.data);
+      if (isValid(analytics)) {
+        analytics.forEach((data) => {
+          if (isValid(data)) {
+            console.log('game-analysis', data);
+            if (data.fullWave.length > 2) this.data.push(this.mapper.map(data));
+          }
+        });
+        console.log('Data Mapped', this.data);
+      }
     });
   }
 
@@ -73,29 +76,29 @@ class ChartMapper {
     let fullWave = new ChartModel();
     fullWave.setName(`Full Wave ${model.id}`);
 
-    model.fullWave.forEach(point => {
-      fullWave.addSerie(point.y, String(point.x))
+    model.fullWave.forEach((point) => {
+      fullWave.addSerie(point.y, String(point.x));
     });
 
     model.domains.forEach((domain) => {
       let serie = new ChartModel();
-      serie.setName(`Wave ${model.id} domain of Point(${domain.domain.x}, ${domain.domain.y})`);
+      serie.setName(
+        `Wave ${model.id} domain of Point(${domain.domain.x}, ${domain.domain.y})`
+      );
       domain.values.forEach((value) => {
-        let point = model.fullWave.find(p => p.index === value);
-        if(point) {
+        let point = model.fullWave.find((p) => p.index === value);
+        if (point) {
           serie.addSerie(point.y, String(point.x));
         } else {
-          console.error("Error. Domain point was not found on the wave");
+          console.error('Error. Domain point was not found on the wave');
         }
       });
       output.addDomain(serie);
     });
 
-
     output.setFullWave(fullWave);
     return output;
   }
-
 }
 
 class ChartModel {
@@ -120,7 +123,6 @@ class ChartModel {
 }
 
 class ChartModelSet {
-
   domains: ChartModel[];
   fullWave: ChartModel | undefined;
 
@@ -129,7 +131,7 @@ class ChartModelSet {
   }
 
   addDomain(...domains: ChartModel[]) {
-    domains.forEach(domain => this.domains?.push(domain));
+    domains.forEach((domain) => this.domains?.push(domain));
   }
 
   setDomains(domains: ChartModel[]) {
@@ -141,5 +143,4 @@ class ChartModelSet {
     this.fullWave = fullWave;
     return this;
   }
-
 }
