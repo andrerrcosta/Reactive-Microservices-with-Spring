@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: WaveStreamService
+  data:
+    mongodb:
+      uri: mongodb://127.0.0.1:27017/wavestreamservice
+logging:
+  level:
+    org:
+      springframework:
+        ampq:
+          rabbit:
+            core:
+              RabbitAdmin: DEBUG
+
+# Usaremos uma propriedade para remover o stacktrace da resposta de erros na web
+server:
+  port: 8083
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on-param
+
+amqp:
+  exchange:
+    wavestream: wave-stream-change
+  queue:
+    wavestream: wave-stream-queue
+  routingkey: 
+    wavestream: wave-stream-key
+  

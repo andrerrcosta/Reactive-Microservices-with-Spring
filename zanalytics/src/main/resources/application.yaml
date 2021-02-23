@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: AnalyticsService
+
+logging:
+  level:
+    org:
+      springframework:
+        ampq:
+          rabbit:
+            core:
+              RabbitAdmin: DEBUG
+
+# Usaremos uma propriedade para remover o stacktrace da resposta de erros na web
+server:
+  port: 8085
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on-param
+
+amqp:
+  exchange:
+    wavestream: wave-stream-change
+    analytics: analytics-report
+  queue:
+    analytics: analytics-queue
+  routingkey:
+    wavestream: wave-stream-key
+    analytics: analytics-report-key

@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: AnalyticsClient
+  data:
+    mongodb:
+      uri: mongodb://127.0.0.1:27017/analyticsclient
+logging:
+  level:
+    org:
+      springframework:
+        ampq:
+          rabbit:
+            core:
+              RabbitAdmin: DEBUG
+
+server:
+  port: 8090
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on-param
+
+amqp:
+  exchange:
+    analytics: analytics-report
+  queue:
+    analyticsclient: analytics-client-queue
+  routingkey:
+    analytics: analytics-report-key
+

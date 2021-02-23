@@ -1,0 +1,25 @@
+.container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu {
+  height: 100px;
+  box-shadow: 0px 1px 15px 1px rgb(69 65 78 / 8%);
+  z-index: 100;
+  position: fixed;
+  width: 100%;
+  color: white;
+  background: #2e2e61;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 100%;
+  position: relative;
+  margin-top: 100px;
+}

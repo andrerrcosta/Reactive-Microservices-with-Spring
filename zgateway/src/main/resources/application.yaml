@@ -1,0 +1,58 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: GatewayService
+  cloud:
+    loadbalancer:
+      ribbon:
+        # I'm not using. In fact, its not even declared as dependency
+        enabled: false
+    consul:
+      enabled: true
+      discovery:
+        # Get only services that are passing the health check
+        query-passing: true
+    gateway:
+      routes:
+        - id: users
+          uri: http://localhost:8082/
+          predicates:
+            - Path=/users, /users/**
+        - id: wavestream
+          uri: http://localhost:8083/
+          predicates:
+            - Path=/wavestream, /wavestream/**
+        - id: analytics
+          uri: http://localhost:8090/
+          predicates:
+            - Path=/analyticsclient, /analyticsclient/**
+        - id: systemtester
+          uri: ws://localhost:8089/
+          predicates:
+            - Path=/systemtester, /systemtester/**
+      globalcors:
+        cors-configurations:
+          "[/**]":
+            allowedOrigins: "http://localhost:4200"
+            allowedHeaders:
+              - "*"
+            allowedMethods:
+              - "GET"
+              - "POST"
+              - "OPTIONS"
+      default-filters:
+        - name: Retry
+          args:
+            retries: 3
+            methods: GET,POST
+
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          gateway:
+            handler:
+              predicate: trace

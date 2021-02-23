@@ -1,0 +1,25 @@
+.container {
+  width: 100%;
+  height: calc(100vh - 100px);
+  font-family: poppins;
+  display: flex;
+  flex-flow: wrap;
+}
+
+.content-button {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-basis: 0;
+  flex-grow: 1;
+  cursor: default;
+  font-size: 30px;
+  font-weight: 600;
+  transition: all 0.4s ease;
+}
+
+.content-button:hover {
+  background: #2e2e61;
+  color: #fff;
+}

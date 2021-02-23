@@ -1,0 +1,40 @@
+.container {
+  width: 100%;
+  height: calc(100vh - 100px);
+  font-family: poppins;
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #2e2e61;
+  width: 100px;
+  height: 45px;
+  color: white;
+  cursor: default;
+  border-radius: 7px;
+}
+
+.button:hover {
+  background: #24244d;
+}
+
+.results {
+  margin-top: 20px;
+  width: 100%;
+  height: 100%;
+}
+
+.results textarea {
+  box-sizing: border-box;
+  padding: 10px;
+  width: 100%;
+  height: 100%;
+  border: 3px solid #24244d;
+  border-radius: 7px;
+  resize: none;
+}

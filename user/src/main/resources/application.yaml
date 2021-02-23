@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: UserService
+  data:
+    mongodb:
+      uri: mongodb://127.0.0.1:27018/userservice
+logging:
+  level:
+    org:
+      springframework:
+        ampq:
+          rabbit:
+            core:
+              RabbitAdmin: DEBUG
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" 
+
+# Usaremos uma propriedade para remover o stacktrace da resposta de erros na web
+server:
+  port: 8082
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on-param
+
+amqp:
+  exchange:
+    userstatus: user-status-change
+  

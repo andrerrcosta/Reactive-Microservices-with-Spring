@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="header">
+    <div class="title">Game Analytics of User {{ currentUser.email }}</div>
+    <div class="description">FullWave x Pattern of Scores</div>
+  </div>
+  <div *ngFor="let item of data" class="chart-container">
+    <!-- {{item.fullWave | json }} -->
+
+    <div class="chart-fullwave">
+      <ngx-charts-area-chart
+        [view]="config.view"
+        [scheme]="config.scheme"
+        [legend]="config.legend"
+        [showXAxisLabel]="config.showXAxisLabel"
+        [showYAxisLabel]="config.showYAxisLabel"
+        [xAxis]="config.xAxis"
+        [yAxis]="config.yAxis"
+        [xAxisLabel]="config.xAxisLabel"
+        [yAxisLabel]="config.yAxisLabel"
+        [timeline]="config.timeline"
+        [results]="[item.fullWave]"
+        (select)="onSelect($event)"
+      >
+      </ngx-charts-area-chart>
+    </div>
+
+    <div *ngFor="let domain of item.domains" class="chart-domain">
+      <!-- {{domain | json }} -->
+      <ngx-charts-area-chart
+        [view]="config.view"
+        [scheme]="config.scheme"
+        [legend]="config.legend"
+        [showXAxisLabel]="config.showXAxisLabel"
+        [showYAxisLabel]="config.showYAxisLabel"
+        [xAxis]="config.xAxis"
+        [yAxis]="config.yAxis"
+        [xAxisLabel]="config.xAxisLabel"
+        [yAxisLabel]="config.yAxisLabel"
+        [timeline]="config.timeline"
+        [results]="[domain]"
+        (select)="onSelect($event)"
+      >
+      </ngx-charts-area-chart>
+    </div>
+  </div>
+</div>

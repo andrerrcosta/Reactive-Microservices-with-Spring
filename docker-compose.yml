@@ -1,0 +1,121 @@
+version: "3"
+services:
+
+  wavestream:
+    image: wavestream-service:1.0
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CLOUD_CONSUL_HOST=consul-dev
+    depends_on:
+      - rabbitmq-dev
+      - consul-importer
+    networks:
+      - microservices
+
+  analytics:
+    image: analytics-service:1.0
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CLOUD_CONSUL_HOST=consul-dev
+    depends_on:
+      - rabbitmq-dev
+      - consul-importer
+    networks:
+      - microservices
+
+  analyticsclient:
+    image: analyticsclient-service:1.0
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CLOUD_CONSUL_HOST=consul-dev
+    depends_on:
+      - rabbitmq-dev
+      - consul-importer
+    networks:
+      - microservices
+
+  user:
+    image: user-service:1.0
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CLOUD_CONSUL_HOST=consul-dev
+    depends_on:
+      - rabbitmq-dev
+      - consul-importer
+    networks:
+      - microservices
+
+  logger:
+    image: logger-service:1.0
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CLOUD_CONSUL_HOST=consul-dev
+    depends_on:
+      - rabbitmq-dev
+      - consul-importer
+    networks:
+      - microservices
+
+  gateway:
+    image: gateway-service:1.0
+    ports:
+      - '8000:8000'
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CLOUD_CONSUL_HOST=consul-dev
+    depends_on:
+      - rabbitmq-dev
+      - consul-importer
+    networks:
+      - microservices
+
+
+  # ZCLIENT - ANGULAR
+  frontend:
+    image: game-client:1.0
+    ports:
+      - '4200:80'
+
+  # MONGODB
+  mongodb:
+    image : mongo
+    container_name: mongodb-dev
+    ports:
+      - 27017:27017 # I DON'T WANT TO STOP MY LOCAL MONGO ON 27017
+    restart: unless-stopped
+    networks: 
+      - microservices
+
+  consul-importer:
+    image: consul-importer:1.0
+    depends_on:
+      - consul-dev
+    networks:
+      - microservices
+
+  # CONSUL
+  consul-dev:
+    image: consul:1.7.2
+    container_name: consul-dev
+    # The UDP port 8600 is used by Consul nodes to talk to each other, so
+    # it's good to add it here even though we're using a single-node setup.
+    ports:
+      - '8500:8500'
+      - '8600:8600/udp'
+    command: 'agent -dev -node=gameanalytics -client=0.0.0.0 -log-level=INFO'
+    networks:
+      - microservices
+
+  # RABBIT-SERVER
+  rabbitmq-dev:
+    image: rabbitmq:3-management
+    container_name: rabbit-dev
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    networks:
+      - microservices
+
+networks:
+  microservices:
+    driver: bridge

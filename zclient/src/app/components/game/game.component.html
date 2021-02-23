@@ -1,0 +1,59 @@
+<div class="container">
+  <div class="gameBoard" id="game-box"></div>
+  <div class="rightBoard">
+    <div class="scoreBoard">
+      <h3>Press Q to enable cheater</h3>
+      <h3 class="cheater-{{engine.enabledCheater ? 'enabled' : 'disabled'}}">{{engine.enabledCheater ? "Enabled" : "Disabled"}}</h3>
+      <h3>Score</h3>
+      <div>Score: {{ engine.scores }}</div>
+      <div>Accuracy: {{ engine.accuracy }}</div>
+    </div>
+
+  </div>
+</div>
+
+<div *ngIf="!start" class="configurations">
+  <h2>Configurations</h2>
+  <span>Time between elements: {{ engineConfig.timeBetween }} ms</span>
+  <input
+    type="range"
+    min="200"
+    max="4000"
+    [(ngModel)]="engineConfig.timeBetween"
+  />
+  <span>Time Alive: {{ engineConfig.timeAlive }} ms</span>
+  <input
+    type="range"
+    min="200"
+    max="4000"
+    [(ngModel)]="engineConfig.timeAlive"
+  />
+  <span>Elements Size: {{ engineConfig.elementSize }} px</span>
+  <input
+    type="range"
+    min="8"
+    max="250"
+    [(ngModel)]="engineConfig.elementSize"
+  />
+  <span>Game Duration: {{ engineConfig.timeLimit }} ms</span>
+  <input
+    type="range"
+    min="5000"
+    max="80000"
+    [(ngModel)]="engineConfig.timeLimit"
+  />
+  <div class="config-button" (click)="play()">Play</div>
+</div>
+
+<div *ngIf="end" class="configurations">
+  <h2>End Game</h2>
+  <h3>Score</h3>
+  <div>Score: {{ engine.scores }}</div>
+  <div>Accuracy: {{ engine.accuracy }}</div>
+  <div style="display: flex">
+    <div class="config-button" (click)="restart()">Play Again</div>
+    <div class="config-button" (click)="config()">Configurations</div>
+    <div class="config-button" (click)="analyze()">Analize Games</div>
+    <div class="config-button" (click)="quit()">Quit Game</div>
+  </div>
+</div>
