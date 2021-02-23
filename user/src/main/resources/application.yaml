@@ -3,7 +3,7 @@ spring:
     name: UserService
   data:
     mongodb:
-      uri: mongodb://127.0.0.1:27018/userservice
+      uri: mongodb://127.0.0.1:27017/userservice
 logging:
   level:
     org:
