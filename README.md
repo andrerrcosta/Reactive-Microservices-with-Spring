@@ -11,7 +11,7 @@ Front-end: Angular 10, RxJs, Node ~14.
 
 You may want to use the docker compose. so i have some notes:
 - Spring-boot buildpacks are not supporting Java14. For this reason I put the dockerfiles
-inside the services. You can build the images and run the docker-compose. Everything is working.
+inside the services. You can build the images and run the docker-compose.
 - Java14 is not allowing the behaviour of blockhound by default. I will not worry about that right now.
 
 Bugs:
