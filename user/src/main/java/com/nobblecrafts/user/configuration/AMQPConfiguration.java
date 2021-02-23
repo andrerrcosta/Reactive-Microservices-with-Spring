@@ -42,8 +42,9 @@ public class AMQPConfiguration {
      * stick to JSON in our system since it’s an extended standard, and it’s also
      * good for educational purposes because the payload is readable. In real
      * systems where performance is critical, you should consider an efficient
-     * binary format (e.g., protobuf). See https://tpd.io/dataser for a comparison
-     * of data serialization formats.
+     * binary format (e.g., protobuf). See
+     * https://en.wikipedia.org/wiki/Comparison_of_data-serialization_formats for a
+     * comparison of data serialization formats.
      * 
      */
     @Bean

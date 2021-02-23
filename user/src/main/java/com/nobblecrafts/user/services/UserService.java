@@ -63,7 +63,7 @@ public class UserService implements ClientService {
      * processed. In this case, the queue would need to be set up to requeue the
      * rejected messages (which is the default behavior). The section Transactions
      * in the Spring AMQP documentation explains how they work in detail; see
-     * https://tpd.io/rmq-tx.
+     * https://docs.spring.io/spring-amqp/reference/html/#transactions
      * 
      * In many cases like ours, we can simplify the strategy for transactions and
      * limit it only to the database.

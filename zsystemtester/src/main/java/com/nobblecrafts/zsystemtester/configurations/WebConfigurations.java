@@ -40,11 +40,11 @@ public class WebConfigurations implements WebFluxConfigurer {
         return new WebSocketHandlerAdapter();
     }
 
-    @Override
-    public void addCorsMappings(CorsRegistry corsRegistry) {
-        corsRegistry.addMapping("/**").allowedOrigins("http://localhost:4200").allowedMethods("PUT", "POST", "DELETE",
-                "GET");
-    }
+    // @Override
+    // public void addCorsMappings(CorsRegistry corsRegistry) {
+    //     corsRegistry.addMapping("/**").allowedOrigins("http://localhost:4200").allowedMethods("PUT", "POST", "DELETE",
+    //             "GET");
+    // }
 
     @Bean
     public WebClient webClient(WebClient.Builder builder) {
