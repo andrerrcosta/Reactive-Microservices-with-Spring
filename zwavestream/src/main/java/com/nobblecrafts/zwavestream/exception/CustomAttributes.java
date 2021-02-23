@@ -8,11 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.server.ResponseStatusException;
 
-/**
- * Nessa classe nós estamos customizando todos as respostas aos erros cujo
- * Throwble seja do tipo ResponseStatusException
- */
-
 @Component
 public class CustomAttributes extends DefaultErrorAttributes {
     
@@ -28,9 +23,6 @@ public class CustomAttributes extends DefaultErrorAttributes {
             errorAttributesMap.put("devMessage", "A ResponseStatusException Happened");
         }
 
-        /**
-         * Esse super.getError attributes é o método que irá ser chamado sempre que uma excessão ocorrer
-         */
         return errorAttributesMap;
     }
 }

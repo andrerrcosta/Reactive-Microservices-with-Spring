@@ -14,5 +14,8 @@ You may want to use the docker compose. so i have some notes:
 inside the services. You can build the images and run the docker-compose. Everything is working.
 - Java14 is not allowing the behaviour of blockhound by default. I will not worry about that right now.
 
+Problems:
+Problems on Game-Cheater (front-end). I'm fixing it.
+
 andrecosta@nobblecrafts.com
 
